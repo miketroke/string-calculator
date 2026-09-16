@@ -41,6 +41,11 @@ final class StringCalculator
     private function parseNumbersWithSeparator(string $numbers): array
     {
         $numbers = substr($numbers, 2);
+        if (str_starts_with($numbers, "\n\n")) {
+            $numbers = substr($numbers, 2);
+            return ["\n", $numbers];
+        }
+
         $lineBreakPosition = strpos($numbers, "\n");
         $separator = substr($numbers, 0, $lineBreakPosition);
         $numbers = substr($numbers, $lineBreakPosition + 1);
