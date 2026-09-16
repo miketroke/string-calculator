@@ -18,7 +18,7 @@ final class StringCalculatorTest extends TestCase
     }
 
     #[Test]
-    public function it_returns_zero_for_an_empty_string(): void
+    public function itReturnsZeroForEmptyString(): void
     {
         $this->assertSame('0', $this->calculator->add(''));
     }
