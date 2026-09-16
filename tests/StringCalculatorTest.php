@@ -70,4 +70,10 @@ final class StringCalculatorTest extends TestCase
     {
         $this->assertSame("6.6", $this->calculator->add("//\n\n1.1\n2.2\n3.3"));
     }
+
+    #[Test]
+    public function itReturnsErrorWhenNegativeNumbersAreProvided(): void
+    {
+        $this->assertSame("Negative not allowed: -1, -2", $this->calculator->add("-1,-2"));
+    }
 }
