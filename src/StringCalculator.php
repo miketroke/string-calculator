@@ -21,6 +21,12 @@ final class StringCalculator
 
         $parts = $this->parseNumbers($numbers, $separator);
 
+        $negativeNumbers = array_filter($parts, fn($part) => (float) $part < 0);
+
+        if ($negativeNumbers) {
+            return ("Negative not allowed: " . implode(", ", $negativeNumbers));
+        }
+
         if ($this->hasNumbers($parts)) {
             return $this->sum($parts);
         }
