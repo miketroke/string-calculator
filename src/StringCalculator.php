@@ -12,16 +12,10 @@ final class StringCalculator
             return '0';
         }
 
-        $numbers = str_replace('\n', ',', $numbers);
-        $parts = explode(',', $numbers);
+        $parts = $this->parseNumbers($numbers);
 
         if (count($parts) > 1) {
-            $sum = 0;
-
-            foreach ($parts as $part) {
-                $sum += (float) $part;
-            }
-            return (string) $sum;
+            return $this->sum($parts);
         }
 
         return $numbers;
@@ -30,5 +24,21 @@ final class StringCalculator
     public function isEmpty(string $numbers): bool
     {
         return $numbers === "";
+    }
+
+    public function parseNumbers(string $numbers): array
+    {
+        $numbers = str_replace('\n', ',', $numbers);
+        return explode(',', $numbers);
+    }
+
+    public function sum(array $parts): string
+    {
+        $sum = 0;
+
+        foreach ($parts as $part) {
+            $sum += (float) $part;
+        }
+        return (string) $sum;
     }
 }
