@@ -16,7 +16,7 @@ final class StringCalculator
         $separator = "\n";
 
         if ($this->startsWithDoubleSlash($numbers)) {
-            [$separator, $numbers] = $this->parseNumbersWithSeparator($numbers);
+            [$separator, $numbers] = $this->parseCustomSeparator($numbers);
         }
 
         $parts = $this->parseNumbers($numbers, $separator);
@@ -38,10 +38,11 @@ final class StringCalculator
         return str_starts_with($numbers, "//");
     }
 
-    private function parseNumbersWithSeparator(string $numbers): array
+    private function parseCustomSeparator(string $numbers): array
     {
         $numbers = substr($numbers, 2);
-        if (str_starts_with($numbers, "\n\n")) {
+
+        if ($this->startsWithDoubleLineBreak($numbers)) {
             $numbers = substr($numbers, 2);
             return ["\n", $numbers];
         }
@@ -51,6 +52,10 @@ final class StringCalculator
         $numbers = substr($numbers, $lineBreakPosition + 1);
 
         return [$separator, $numbers];
+    }
+    private function startsWithDoubleLineBreak(string $numbers): bool
+    {
+        return str_starts_with($numbers, "\n\n");
     }
 
     private function parseNumbers(string $numbers, string $separator): array
