@@ -21,7 +21,7 @@ final class StringCalculator
 
         $parts = $this->parseNumbers($numbers, $separator);
 
-        $negativeNumbers = array_filter($parts, fn($part) => (float) $part < 0);
+        $negativeNumbers = $this->getNegativeNumbers($parts);
 
         if ($negativeNumbers) {
             return ("Negative not allowed: " . implode(", ", $negativeNumbers));
@@ -68,6 +68,11 @@ final class StringCalculator
     {
         $numbers = str_replace($separator, ',', $numbers);
         return explode(',', $numbers);
+    }
+
+    private function getNegativeNumbers(array $parts): array
+    {
+        return array_filter($parts, fn($part) => (float) $part < 0);
     }
 
     private function hasNumbers(array $parts): bool
