@@ -22,4 +22,9 @@ final class StringCalculatorTest extends TestCase
     {
         $this->assertSame('0', $this->calculator->add(''));
     }
+
+    public function itReturnsSameNumberForSingleNumbers(): void
+    {
+        $this->assertSame('1', $this->calculator->add("1"));
+    }
 }
