@@ -40,4 +40,10 @@ final class StringCalculatorTest extends TestCase
     {
         $this->assertSame('3.3', $this->calculator->add("1.1,2.2"));
     }
+
+    #[Test]
+    public function itReturnsSumForFloatNumbersSeparatedByLineBreak(): void
+    {
+        $this->assertSame("3.3", $this->calculator->add('1.1\n2.2'));
+    }
 }
