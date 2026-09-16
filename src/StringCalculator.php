@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MRC\StringCalculator;
 
+
 final class StringCalculator
 {
     public function add(string $numbers): string
@@ -12,27 +13,42 @@ final class StringCalculator
             return '0';
         }
 
-        $parts = $this->parseNumbers($numbers);
+        $separator = "\n";
 
-        if (count($parts) > 1) {
+        if (str_starts_with($numbers, '//')) {
+            $numbers = substr($numbers, 2);
+
+            $lineBreakPosition = strpos($numbers, "\n");
+
+            $separator = substr($numbers, 0, $lineBreakPosition);
+            $numbers = substr($numbers, $lineBreakPosition + 1);
+        }
+
+        $parts = $this->parseNumbers($numbers, $separator);
+
+        if ($this->hasNumbers($parts)) {
             return $this->sum($parts);
         }
 
         return $numbers;
     }
 
-    public function isEmpty(string $numbers): bool
+    private function isEmpty(string $numbers): bool
     {
         return $numbers === "";
     }
 
-    public function parseNumbers(string $numbers): array
+    private function parseNumbers(string $numbers, string $separator): array
     {
-        $numbers = str_replace('\n', ',', $numbers);
+        $numbers = str_replace($separator, ',', $numbers);
         return explode(',', $numbers);
     }
 
-    public function sum(array $parts): string
+    private function hasNumbers(array $parts): bool
+    {
+        return count($parts) > 1;
+    }
+    private function sum(array $parts): string
     {
         $sum = 0;
 
