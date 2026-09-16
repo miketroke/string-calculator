@@ -23,8 +23,15 @@ final class StringCalculatorTest extends TestCase
         $this->assertSame('0', $this->calculator->add(''));
     }
 
+    #[Test]
     public function itReturnsSameNumberForSingleNumbers(): void
     {
-        $this->assertSame('1', $this->calculator->add("1"));
+        $this->assertSame("1", $this->calculator->add("1"));
+    }
+
+    #[Test]
+    public function itReturnsSumForNumbersSeparatedByCommas(): void
+    {
+        $this->assertSame('3', $this->calculator->add("1,2"));
     }
 }

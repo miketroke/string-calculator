@@ -11,16 +11,8 @@ final class StringCalculator
         if ($numbers === "") {
             return '0';
         }
-        if ($this->isSingleNumber($numbers)) {
-            return $numbers;
-        }
 
-        return "";
-    }
-
-    public function isSingleNumber(string $numbers): bool
-    {
-        return $numbers === is_numeric($numbers);
+        return $numbers;
     }
 
 }
