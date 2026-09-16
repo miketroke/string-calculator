@@ -13,10 +13,21 @@ final class StringCalculator
         }
 
         $parts = explode(',', $numbers);
+
         if (count($parts) > 1) {
             $sum = 0;
 
             foreach ($parts as $part) {
+                $sum += (float) $part;
+            }
+            return (string) $sum;
+        }
+
+        $parts2 = explode('\n', $numbers);
+        if (count($parts2) > 1) {
+            $sum = 0;
+
+            foreach ($parts2 as $part) {
                 $sum += (float) $part;
             }
             return (string) $sum;
