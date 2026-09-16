@@ -11,6 +11,9 @@ final class StringCalculator
         if ($numbers === "") {
             return '0';
         }
+        if ($numbers === is_numeric($numbers)) {
+            return $numbers;
+        }
         return "";
     }
 }
