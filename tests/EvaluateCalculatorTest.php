@@ -22,4 +22,10 @@ final class EvaluateCalculatorTest extends TestCase
     {
         $this->assertSame('0', $this->calculator->evaluate(""));
     }
+
+    public function evaluateReturnsSameNumberForSingleNumber(): void
+    {
+        $this->assertSame("1", $this->calculator->evaluate("1"));
+    }
 }
+
