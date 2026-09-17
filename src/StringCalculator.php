@@ -22,15 +22,13 @@ final class StringCalculator
             return "0";
         }
 
-        $numbers = str_replace("\n", ',', $numbers);
-        $numbers = explode(',', $numbers);
+        $parts = $this->parseNumbers($numbers, "\n");
 
-        $product = 1;
-        foreach ($numbers as $number) {
-            $product *= (float) $number;
+        if ($this->hasNumbers($parts)) {
+            return (string) $this->calculate($parts, 'multiply');
         }
 
-        return (string) $product;
+        return $numbers;
     }
 
     private function addInternal(string $numbers): float
@@ -54,7 +52,7 @@ final class StringCalculator
         }
 
         if ($this->hasNumbers($parts)) {
-            return (float) $this->sum($parts);
+            return (float) $this->calculate($parts, 'add');
         }
 
         return (float) $numbers;
@@ -122,13 +120,27 @@ final class StringCalculator
     {
         return count($parts) > 1;
     }
-    private function sum(array $parts): float
+    private function calculate(array $parts, string $operation): float
     {
-        $sum = 0;
+        switch ($operation) {
+            case 'add':
+                $result = 0;
 
-        foreach ($parts as $part) {
-            $sum += (float) $part;
+                foreach ($parts as $part) {
+                    $result += (float) $part;
+                }
+
+                return $result;
+
+            case 'multiply':
+                $result = 1;
+
+                foreach ($parts as $part) {
+                    $result *= (float) $part;
+                }
+
+                return $result;
         }
-        return $sum;
+        throw new \InvalidArgumentException("Invalid operation: $operation");
     }
 }
