@@ -25,7 +25,11 @@ final class StringCalculator
             return '0';
         }
 
-        return $expression;
+        $result = $this->parseNumbers($expression, "+");
+
+        $result = $this->add($result);
+
+        return (string) $result;
     }
 
     private function operationInternal(string $numbers, string $operation): float
