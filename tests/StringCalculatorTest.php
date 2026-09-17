@@ -20,61 +20,61 @@ final class StringCalculatorTest extends TestCase
     #[Test]
     public function addReturnsZeroForEmptyString(): void
     {
-        $this->assertSame('0', $this->calculator->add(''));
+        $this->assertSame('0', $this->calculator->execute('', 'add'));
     }
 
     #[Test]
     public function addReturnsSameNumberForSingleNumbers(): void
     {
-        $this->assertSame("1", $this->calculator->add("1"));
+        $this->assertSame("1", $this->calculator->execute("1", 'add'));
     }
 
     #[Test]
     public function addReturnsSumForNumbersSeparatedByCommas(): void
     {
-        $this->assertSame('3', $this->calculator->add("1,2"));
+        $this->assertSame('3', $this->calculator->execute("1,2", 'add'));
     }
 
     #[Test]
     public function addReturnsSumForFloatNumbersSeparatedByCommas(): void
     {
-        $this->assertSame('3.3', $this->calculator->add("1.1,2.2"));
+        $this->assertSame('3.3', $this->calculator->execute("1.1,2.2", 'add'));
     }
 
     #[Test]
     public function addReturnsSumForFloatNumbersSeparatedByLineBreak(): void
     {
-        $this->assertSame("3.3", $this->calculator->add("1.1\n2.2"));
+        $this->assertSame("3.3", $this->calculator->execute("1.1\n2.2", 'add'));
     }
 
     #[Test]
     public function addReturnsSumForFloatNumbersSeparatedByLineBreakAndCommas(): void
     {
-        $this->assertSame("6.6", $this->calculator->add("1.1\n2.2,3.3"));
+        $this->assertSame("6.6", $this->calculator->execute("1.1\n2.2,3.3", 'add'));
     }
 
     #[Test]
     public function addReturnsSumForFloatNumbersSeparatedByLineBreakAndCommasWithTrailingComma(): void
     {
-        $this->assertSame("6.6", $this->calculator->add("1.1\n2.2,3.3,"));
+        $this->assertSame("6.6", $this->calculator->execute("1.1\n2.2,3.3,", 'add'));
     }
 
     #[Test]
     public function addReturnsSumForFloatNumbersThatUsesCustomSeparatorWhenProvided(): void
     {
-        $this->assertSame("6.6", $this->calculator->add("//;\n1.1;2.2;3.3"));
+        $this->assertSame("6.6", $this->calculator->execute("//;\n1.1;2.2;3.3", 'add'));
     }
 
     #[Test]
     public function addReturnsSumForFloatNumbersThatUsesLineBreakOnCustomSeparator(): void
     {
-        $this->assertSame("6.6", $this->calculator->add("//\n\n1.1\n2.2\n3.3"));
+        $this->assertSame("6.6", $this->calculator->execute("//\n\n1.1\n2.2\n3.3", 'add'));
     }
 
     #[Test]
     public function addReturnsErrorWhenNegativeNumbersAreProvided(): void
     {
-        $this->assertSame("Negative not allowed : -1\nNegative not allowed : -2", $this->calculator->add("-1,-2"));
+        $this->assertSame("Negative not allowed : -1\nNegative not allowed : -2", $this->calculator->execute("-1,-2", 'add'));
     }
 
     #[Test]
@@ -82,68 +82,68 @@ final class StringCalculatorTest extends TestCase
     {
         $this->assertSame(
             "Negative not allowed : -1\nNumber expected but ',' found at position 3.",
-            $this->calculator->add("-1,,2")
+            $this->calculator->execute("-1,,2", 'add')
         );
     }
 
     #[Test]
     public function multiplyReturnsZeroForEmptyString(): void
     {
-        $this->assertSame('0', $this->calculator->multiply(''));
+        $this->assertSame('0', $this->calculator->execute('', 'multiply'));
     }
 
     #[Test]
     public function multiplyReturnsSameNumberForSingleNumber(): void
     {
-        $this->assertSame("1", $this->calculator->multiply("1"));
+        $this->assertSame("1", $this->calculator->execute("1", 'multiply'));
     }
 
     #[Test]
     public function multiplyReturnsProductForNumbersSeparatedByCommas(): void
     {
-        $this->assertSame("6", $this->calculator->multiply("2,3"));
+        $this->assertSame("6", $this->calculator->execute("2,3", 'multiply'));
     }
 
     #[Test]
     public function multiplyReturnsProductForFloatNumbersSeparatedByCommas(): void
     {
-        $this->assertSame("6.6", $this->calculator->multiply("2.2,3"));
+        $this->assertSame("6.6", $this->calculator->execute("2.2,3", 'multiply'));
     }
 
     #[Test]
     public function multiplyReturnsProductForFloatNumbersSeparatedByLineBreak(): void
     {
-        $this->assertSame("6.6", $this->calculator->multiply("2.2\n3"));
+        $this->assertSame("6.6", $this->calculator->execute("2.2\n3", 'multiply'));
     }
 
     #[Test]
     public function multiplyReturnsProductForFloatNumbersSeparatedByLineBreakAndCommas(): void
     {
-        $this->assertSame("21.78", $this->calculator->multiply("2.2\n3,3.3"));
+        $this->assertSame("21.78", $this->calculator->execute("2.2\n3,3.3", 'multiply'));
     }
 
     #[Test]
     public function multiplyReturnsProductForFloatNumbersSeparatedByLineBreakAndCommasWithTrailingComma(): void
     {
-        $this->assertSame("21.78", $this->calculator->multiply("2.2\n3,3.3,"));
+        $this->assertSame("21.78", $this->calculator->execute("2.2\n3,3.3,", 'multiply'));
     }
 
     #[Test]
     public function multiplyReturnsProductForFloatNumbersThatUsesCustomSeparatorWhenProvided(): void
     {
-        $this->assertSame("21.78", $this->calculator->multiply("//;\n2.2;3;3.3"));
+        $this->assertSame("21.78", $this->calculator->execute("//;\n2.2;3;3.3", 'multiply'));
     }
 
     #[Test]
     public function multiplyReturnsProductForFloatNumbersThatUsesLineBreakOnCustomSeparator(): void
     {
-        $this->assertSame("21.78", $this->calculator->multiply("//\n\n2.2\n3\n3.3"));
+        $this->assertSame("21.78", $this->calculator->execute("//\n\n2.2\n3\n3.3", 'multiply'));
     }
 
     #[Test]
     public function multiplyReturnsErrorWhenNegativeNumbersAreProvided(): void
     {
-        $this->assertSame("Negative not allowed : -1\nNegative not allowed : -2", $this->calculator->multiply("-1,-2"));
+        $this->assertSame("Negative not allowed : -1\nNegative not allowed : -2", $this->calculator->execute("-1,-2", 'multiply'));
     }
 
     #[Test]
@@ -151,7 +151,7 @@ final class StringCalculatorTest extends TestCase
     {
         $this->assertSame(
             "Negative not allowed : -1\nNumber expected but ',' found at position 3.",
-            $this->calculator->multiply("-1,,2")
+            $this->calculator->execute("-1,,2", 'multiply')
         );
     }
 }

@@ -7,19 +7,10 @@ namespace MRC\StringCalculator;
 
 final class StringCalculator
 {
-    public function add(string $numbers): string
+    public function execute(string $numbers, string $operation): string
     {
         try {
-            return (string) $this->operationInternal($numbers, 'add');
-        } catch (\Throwable $e) {
-            return $e->getMessage();
-        }
-    }
-
-    public function multiply(string $numbers): string
-    {
-        try {
-            return (string) $this->operationInternal($numbers, 'multiply');
+            return (string) $this->operationInternal($numbers, $operation);
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
