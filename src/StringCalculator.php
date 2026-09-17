@@ -27,7 +27,9 @@ final class StringCalculator
 
         $operators = [
             '+' => 'add',
-            '-' => 'subtract'
+            '-' => 'subtract',
+            '*' => 'multiply',
+            '/' => 'divide',
         ];
 
         foreach ($operators as $separator => $operation) {
