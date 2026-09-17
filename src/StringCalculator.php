@@ -119,45 +119,65 @@ final class StringCalculator
     {
         switch ($operation) {
             case 'add':
-                $result = 0;
-
-                foreach ($parts as $part) {
-                    $result += (float) $part;
-                }
-
-                return $result;
+                return $this->add($parts);
 
             case 'subtract':
-                $result = (float) array_shift($parts);
-
-                foreach ($parts as $part) {
-                    $result -= (float) $part;
-                }
-
-                return $result;
+                return $this->subtract($parts);
 
             case 'multiply':
-                $result = 1;
-
-                foreach ($parts as $part) {
-                    $result *= (float) $part;
-                }
-
-                return $result;
+                return $this->multiply($parts);
 
             case 'divide':
-                $result = (float) array_shift($parts);
-
-                foreach ($parts as $part) {
-                    if ((float) $part === 0.0) {
-                        throw new DivisionByZeroError('Division by zero not allowed');
-                    }
-
-                    $result /= (float) $part;
-                }
-
-                return $result;
+                return $this->divide($parts);
         }
         throw new InvalidArgumentException("Invalid operation: $operation");
+    }
+
+    private function add(array $parts): float
+    {
+        $result = 0;
+
+        foreach ($parts as $part) {
+            $result += (float) $part;
+        }
+
+        return $result;
+    }
+
+    private function subtract(array $parts): float
+    {
+        $result = (float) array_shift($parts);
+
+        foreach ($parts as $part) {
+            $result -= (float) $part;
+        }
+
+        return $result;
+    }
+
+    private function multiply(array $parts): float
+    {
+        $result = 1;
+
+        foreach ($parts as $part) {
+            $result *= (float) $part;
+        }
+
+        return $result;
+    }
+
+    private function divide(array $parts): float
+    {
+        $result = (float) array_shift($parts);
+
+        foreach ($parts as $part) {
+            if ((float) $part === 0.0) {
+                throw new DivisionByZeroError('Division by zero not allowed');
+            }
+
+            $result /= (float) $part;
+        }
+
+        return $result;
     }
 }
