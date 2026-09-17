@@ -133,4 +133,25 @@ final class StringCalculatorTest extends TestCase
     {
         $this->assertSame("21.78", $this->calculator->multiply("//;\n2.2;3;3.3"));
     }
+
+    #[Test]
+    public function multiplyReturnsProductForFloatNumbersThatUsesLineBreakOnCustomSeparator(): void
+    {
+        $this->assertSame("21.78", $this->calculator->multiply("//\n\n2.2\n3\n3.3"));
+    }
+
+    #[Test]
+    public function multiplyReturnsErrorWhenNegativeNumbersAreProvided(): void
+    {
+        $this->assertSame("Negative not allowed : -1\nNegative not allowed : -2", $this->calculator->multiply("-1,-2"));
+    }
+
+    #[Test]
+    public function multiplyReturnsMultipleErrorsSeparatedByLineBreak(): void
+    {
+        $this->assertSame(
+            "Negative not allowed : -1\nNumber expected but ',' found at position 3.",
+            $this->calculator->multiply("-1,,2")
+        );
+    }
 }
