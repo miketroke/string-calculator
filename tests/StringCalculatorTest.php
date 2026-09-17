@@ -103,4 +103,22 @@ final class StringCalculatorTest extends TestCase
     {
         $this->assertSame("6", $this->calculator->multiply("2,3"));
     }
+
+    #[Test]
+    public function multiplyReturnsProductForFloatNumbersSeparatedByCommas(): void
+    {
+        $this->assertSame("6.6", $this->calculator->multiply("2.2,3"));
+    }
+
+    #[Test]
+    public function multiplyReturnsProductForFloatNumbersSeparatedByLineBreak(): void
+    {
+        $this->assertSame("6.6", $this->calculator->multiply("2.2\n3"));
+    }
+
+    #[Test]
+    public function multiplyReturnsProductForFloatNumbersSeparatedByLineBreakAndCommas(): void
+    {
+        $this->assertSame("21.78", $this->calculator->multiply("2.2\n3,3.3"));
+    }
 }
