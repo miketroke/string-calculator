@@ -71,6 +71,7 @@ final class StringCalculator
 
         return [$separator, $numbers];
     }
+
     private function startsWithDoubleLineBreak(string $numbers): bool
     {
         return str_starts_with($numbers, "\n\n");
@@ -113,6 +114,7 @@ final class StringCalculator
     {
         return count($parts) > 1;
     }
+
     private function operate(array $parts, string $operation): float
     {
         switch ($operation) {
