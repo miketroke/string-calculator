@@ -76,5 +76,11 @@ final class EvaluateCalculatorTest extends TestCase
     {
         $this->assertSame("1", $this->calculator->evaluate("6/3/2"));
     }
+
+    #[Test]
+    public function evaluateReturnsResultOnMixedOperationsWithAdditionAndSubtraction(): void
+    {
+        $this->assertSame("2", $this->calculator->evaluate("1+2-1"));
+    }
 }
 
