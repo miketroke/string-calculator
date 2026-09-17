@@ -18,7 +18,7 @@ final class StringCalculator
 
     public function multiply(string $numbers): string
     {
-        if ($numbers === "") {
+        if ($this->isEmpty($numbers)) {
             return "0";
         }
 
@@ -91,7 +91,12 @@ final class StringCalculator
     private function parseNumbers(string $numbers, string $separator): array
     {
         $numbers = str_replace($separator, ',', $numbers);
-        return explode(',', $numbers);
+        $parts = explode(',', $numbers);
+
+        if (end($parts) === '') {
+            array_pop($parts);
+        }
+        return $parts;
     }
 
     private function getErrors(array $parts): array
