@@ -16,4 +16,10 @@ final class EvaluateCalculatorTest extends TestCase
     {
         $this->calculator = new StringCalculator();
     }
+
+    #[Test]
+    public function evaluateReturnsZeroForEmptyString(): void
+    {
+        $this->assertSame('0', $this->calculator->evaluate(""));
+    }
 }
