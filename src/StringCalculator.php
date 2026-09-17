@@ -19,6 +19,13 @@ final class StringCalculator
         }
     }
 
+    public function evaluate(string $expression): string
+    {
+        if ($this->isEmpty($expression)) {
+            return '0';
+        }
+    }
+
     private function operationInternal(string $numbers, string $operation): float
     {
         if ($this->isEmpty($numbers)) {
