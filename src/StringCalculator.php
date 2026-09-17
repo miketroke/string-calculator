@@ -8,8 +8,16 @@ use InvalidArgumentException;
 use Exception;
 use Throwable;
 use DivisionByZeroError;
+
 final class StringCalculator
 {
+    private const OPERATORS = [
+        '+' => 'add',
+        '-' => 'subtract',
+        '*' => 'multiply',
+        '/' => 'divide',
+    ];
+
     public function calculate(string $numbers, string $operation): string
     {
         try {
@@ -25,31 +33,33 @@ final class StringCalculator
             return '0';
         }
 
-        $operators = [
-            '+' => 'add',
-            '-' => 'subtract',
-            '*' => 'multiply',
-            '/' => 'divide',
-        ];
-
-        foreach ($operators as $operator => $operation) {
+        foreach (self::OPERATORS as $operator => $operation) {
             $position = strrpos($expression, $operator);
 
             if ($position !== false) {
-                $left = substr($expression, 0, $position);
-                $right = substr($expression, $position + 1);
 
-                $leftResult = $this->evaluate($left);
-                $rightResult = $this->evaluate($right);
-
-                return (string) $this->operate(
-                    [$leftResult, $rightResult],
+                return (string) $this->evaluateInternal(
+                    $expression,
+                    $position,
                     $operation
                 );
             }
         }
 
         return $expression;
+    }
+    private function evaluateInternal(string $expression, int $position, string $operation): string
+    {
+        $left = substr($expression, 0, $position);
+        $right = substr($expression, $position + 1);
+
+        $leftResult = $this->evaluate($left);
+        $rightResult = $this->evaluate($right);
+
+        return (string) $this->operate(
+            [$leftResult, $rightResult],
+            $operation
+        );
     }
 
     private function operationInternal(string $numbers, string $operation): float
