@@ -21,10 +21,10 @@ final class StringCalculator
 
         $parts = $this->parseNumbers($numbers, $separator);
 
-        $negativeNumbers = $this->getNegativeNumbers($parts);
+        $errors = $this->getErrors($parts);
 
-        if ($negativeNumbers) {
-            return ("Negative not allowed: " . implode(", ", $negativeNumbers));
+        if ($errors) {
+            return implode("\n", $errors);
         }
 
         if ($this->hasNumbers($parts)) {
@@ -70,9 +70,26 @@ final class StringCalculator
         return explode(',', $numbers);
     }
 
-    private function getNegativeNumbers(array $parts): array
+    private function getErrors(array $parts): array
     {
-        return array_filter($parts, fn($part) => (float) $part < 0);
+        $errors = [];
+        $position = 0;
+        $lastIndex = count($parts) - 1;
+
+        foreach ($parts as $index => $part) {
+
+            if ((float) $part < 0) {
+                $errors[] = "Negative not allowed : $part";
+            }
+
+            if ($part === '' && $index > 0 && $index < $lastIndex) {
+                $errors[] = "Number expected but ',' found at position $position.";
+            }
+
+            $position += strlen($part) + 1;
+        }
+
+        return $errors;
     }
 
     private function hasNumbers(array $parts): bool

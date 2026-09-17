@@ -74,7 +74,7 @@ final class StringCalculatorTest extends TestCase
     #[Test]
     public function itReturnsErrorWhenNegativeNumbersAreProvided(): void
     {
-        $this->assertSame("Negative not allowed: -1, -2", $this->calculator->add("-1,-2"));
+        $this->assertSame("Negative not allowed : -1\nNegative not allowed : -2", $this->calculator->add("-1,-2"));
     }
 
     #[Test]
