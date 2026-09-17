@@ -16,6 +16,14 @@ final class StringCalculator
         }
     }
 
+    public function multiply(string $numbers): string
+    {
+        if ($numbers === "") {
+            return "0";
+        }
+        return $numbers;
+    }
+
     private function addInternal(string $numbers): float
     {
         if ($this->isEmpty($numbers)) {
