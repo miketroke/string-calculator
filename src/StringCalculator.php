@@ -52,17 +52,9 @@ final class StringCalculator
 
     private function resolveParentheses(string $expression): string
     {
-        $closePosition = strpos($expression, ')');
+        [$openPosition, $closePosition] = $this->findInnermostParentheses($expression);
 
-        if ($closePosition === false) {
-            return $expression;
-        }
-
-        $beforeClose = substr($expression, 0, $closePosition);
-
-        $openPosition = strrpos($beforeClose, '(');
-
-        if ($openPosition === false) {
+        if ($openPosition === null || $closePosition === null) {
             return $expression;
         }
 
@@ -81,6 +73,25 @@ final class StringCalculator
 
         return $this->resolveParentheses($expression);
     }
+
+    private function findInnermostParentheses(string $expression): array
+    {
+        $closePosition = strpos($expression, ')');
+
+        if ($closePosition === false) {
+            return [null, null];
+        }
+
+        $beforeClose = substr($expression, 0, $closePosition);
+        $openPosition = strrpos($beforeClose, '(');
+
+        if ($openPosition === false) {
+            return [null, null];
+        }
+
+        return [$openPosition, $closePosition];
+    }
+
     private function evaluateInternal(string $expression, int $position, string $operation): string
     {
         $left = substr($expression, 0, $position);
