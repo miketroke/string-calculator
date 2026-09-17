@@ -127,4 +127,10 @@ final class StringCalculatorTest extends TestCase
     {
         $this->assertSame("21.78", $this->calculator->multiply("2.2\n3,3.3,"));
     }
+
+    #[Test]
+    public function multiplyReturnsProductForFloatNumbersThatUsesCustomSeparatorWhenProvided(): void
+    {
+        $this->assertSame("21.78", $this->calculator->multiply("//;\n2.2;3;3.3"));
+    }
 }
