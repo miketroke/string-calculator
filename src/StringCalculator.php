@@ -127,6 +127,15 @@ final class StringCalculator
 
                 return $result;
 
+            case 'subtract':
+                $result = (float) array_shift($parts);
+
+                foreach ($parts as $part) {
+                    $result -= (float) $part;
+                }
+
+                return $result;
+
             case 'multiply':
                 $result = 1;
 
