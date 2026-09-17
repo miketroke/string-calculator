@@ -97,4 +97,10 @@ final class StringCalculatorTest extends TestCase
     {
         $this->assertSame("1", $this->calculator->multiply("1"));
     }
+
+    #[Test]
+    public function multiplyReturnsProductForNumbersSeparatedByCommas(): void
+    {
+        $this->assertSame("6", $this->calculator->multiply("2,3"));
+    }
 }
