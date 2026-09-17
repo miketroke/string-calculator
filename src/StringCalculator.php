@@ -21,7 +21,16 @@ final class StringCalculator
         if ($numbers === "") {
             return "0";
         }
-        return $numbers;
+
+        $numbers = str_replace("\n", ',', $numbers);
+        $numbers = explode(',', $numbers);
+
+        $product = 1;
+        foreach ($numbers as $number) {
+            $product *= (float) $number;
+        }
+
+        return (string) $product;
     }
 
     private function addInternal(string $numbers): float
