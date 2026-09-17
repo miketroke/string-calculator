@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace MRC\StringCalculator;
 
-
+use InvalidArgumentException;
+use Exception;
+use Throwable;
+use DivisionByZeroError;
 final class StringCalculator
 {
     public function calculate(string $numbers, string $operation): string
     {
         try {
             return (string) $this->operationInternal($numbers, $operation);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return $e->getMessage();
         }
     }
@@ -33,7 +36,7 @@ final class StringCalculator
         $errors = $this->getErrors($parts);
 
         if ($errors) {
-            throw new \Exception(implode("\n", $errors));
+            throw new Exception(implode("\n", $errors));
         }
 
         if ($this->hasNumbers($parts)) {
@@ -131,6 +134,6 @@ final class StringCalculator
 
                 return $result;
         }
-        throw new \InvalidArgumentException("Invalid operation: $operation");
+        throw new InvalidArgumentException("Invalid operation: $operation");
     }
 }
