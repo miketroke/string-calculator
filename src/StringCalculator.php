@@ -35,6 +35,13 @@ final class StringCalculator
             new NegativeNumbersRule(),
             new MissingNumberRule(),
         ];
+
+        $this->operatorRules = [
+            new AddRule(),
+            new SubtractRule(),
+            new MultiplyRule(),
+            new DivideRule(),
+        ];
     }
 
     public function calculate(string $numbers, string $operation): string
@@ -221,67 +228,11 @@ final class StringCalculator
 
     private function operate(array $parts, string $operation): float
     {
-        switch ($operation) {
-            case 'add':
-                return $this->add($parts);
-
-            case 'subtract':
-                return $this->subtract($parts);
-
-            case 'multiply':
-                return $this->multiply($parts);
-
-            case 'divide':
-                return $this->divide($parts);
+        foreach ($this->operatorRules as $rule) {
+            if ($rule->supports($operation)) {
+                return $rule->apply($parts);
+            }
         }
         throw new InvalidArgumentException("Invalid operation: $operation");
-    }
-
-    private function add(array $parts): float
-    {
-        $result = 0;
-
-        foreach ($parts as $part) {
-            $result += (float) $part;
-        }
-
-        return $result;
-    }
-
-    private function subtract(array $parts): float
-    {
-        $result = (float) array_shift($parts);
-
-        foreach ($parts as $part) {
-            $result -= (float) $part;
-        }
-
-        return $result;
-    }
-
-    private function multiply(array $parts): float
-    {
-        $result = 1;
-
-        foreach ($parts as $part) {
-            $result *= (float) $part;
-        }
-
-        return $result;
-    }
-
-    private function divide(array $parts): float
-    {
-        $result = (float) array_shift($parts);
-
-        foreach ($parts as $part) {
-            if ((float) $part === 0.0) {
-                throw new DivisionByZeroError('Division by zero not allowed');
-            }
-
-            $result /= (float) $part;
-        }
-
-        return $result;
     }
 }
