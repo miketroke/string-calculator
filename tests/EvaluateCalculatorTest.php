@@ -116,7 +116,7 @@ final class EvaluateCalculatorTest extends TestCase
     #[Test]
     public function evaluateReturnsResultOnComplexMixedOperationsWithMultipleParenthesesAndAllOperators(): void
     {
-        $this->assertSame("10", $this->calculator->evaluate("1+(2*3)+(4-2)/2"));
+        $this->assertSame("8", $this->calculator->evaluate("1+(2*3)+(4-2)/2"));
     }
 
 }

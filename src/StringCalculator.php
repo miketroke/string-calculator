@@ -33,12 +33,13 @@ final class StringCalculator
             return '0';
         }
 
+        $expression = $this->resolveParentheses($expression);
+
         foreach (self::OPERATORS as $operator => $operation) {
             $position = strrpos($expression, $operator);
 
             if ($position !== false) {
-
-                return (string) $this->evaluateInternal(
+                return $this->evaluateInternal(
                     $expression,
                     $position,
                     $operation
@@ -47,6 +48,38 @@ final class StringCalculator
         }
 
         return $expression;
+    }
+
+    private function resolveParentheses(string $expression): string
+    {
+        $closePosition = strpos($expression, ')');
+
+        if ($closePosition === false) {
+            return $expression;
+        }
+
+        $beforeClose = substr($expression, 0, $closePosition);
+
+        $openPosition = strrpos($beforeClose, '(');
+
+        if ($openPosition === false) {
+            return $expression;
+        }
+
+        $inside = substr(
+            $expression,
+            $openPosition + 1,
+            $closePosition - $openPosition - 1
+        );
+
+        $result = $this->evaluate($inside);
+
+        $expression =
+            substr($expression, 0, $openPosition)
+            . $result
+            . substr($expression, $closePosition + 1);
+
+        return $this->resolveParentheses($expression);
     }
     private function evaluateInternal(string $expression, int $position, string $operation): string
     {
