@@ -76,4 +76,13 @@ final class StringCalculatorTest extends TestCase
     {
         $this->assertSame("Negative not allowed: -1, -2", $this->calculator->add("-1,-2"));
     }
+
+    #[Test]
+    public function itReturnsMultipleErrorsSeparatedByLineBreak(): void
+    {
+        $this->assertSame(
+            "Negative not allowed : -1\nNumber expected but ',' found at position 3.",
+            $this->calculator->add("-1,,2")
+        );
+    }
 }
