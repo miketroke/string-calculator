@@ -133,6 +133,19 @@ final class StringCalculator
                 }
 
                 return $result;
+
+            case 'divide':
+                $result = (float) array_shift($parts);
+
+                foreach ($parts as $part) {
+                    if ((float) $part === 0.0) {
+                        throw new DivisionByZeroError('Division by zero not allowed');
+                    }
+
+                    $result /= (float) $part;
+                }
+
+                return $result;
         }
         throw new InvalidArgumentException("Invalid operation: $operation");
     }
