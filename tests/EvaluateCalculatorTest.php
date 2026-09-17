@@ -52,5 +52,29 @@ final class EvaluateCalculatorTest extends TestCase
     {
         $this->assertSame("0", $this->calculator->evaluate("3-2-1"));
     }
+
+    #[Test]
+    public function evaluateReturnsResultOnMultiplication(): void
+    {
+        $this->assertSame("6", $this->calculator->evaluate("2*3"));
+    }
+
+    #[Test]
+    public function evaluateReturnsResultOnMultiplicationWithMultipleNumbers(): void
+    {
+        $this->assertSame("24", $this->calculator->evaluate("2*3*4"));
+    }
+
+    #[Test]
+    public function evaluateReturnsResultOnDivision(): void
+    {
+        $this->assertSame("2", $this->calculator->evaluate("6/3"));
+    }
+
+    #[Test]
+    public function evaluateReturnsResultOnDivisionWithMultipleNumbers(): void
+    {
+        $this->assertSame("1", $this->calculator->evaluate("6/3/2"));
+    }
 }
 
