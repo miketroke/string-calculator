@@ -10,7 +10,7 @@ final class StringCalculator
     public function add(string $numbers): string
     {
         try {
-            return (string) $this->addInternal($numbers);
+            return (string) $this->operationInternal($numbers, 'add');
         } catch (\Throwable $e) {
             return $e->getMessage();
         }
@@ -18,32 +18,14 @@ final class StringCalculator
 
     public function multiply(string $numbers): string
     {
-        if ($this->isEmpty($numbers)) {
-            return "0";
+        try {
+            return (string) $this->operationInternal($numbers, 'multiply');
+        } catch (\Throwable $e) {
+            return $e->getMessage();
         }
-
-        $separator = "\n";
-
-        if ($this->startsWithDoubleSlash($numbers)) {
-            [$separator, $numbers] = $this->parseCustomSeparator($numbers);
-        }
-
-        $parts = $this->parseNumbers($numbers, $separator);
-
-        $errors = $this->getErrors($parts);
-
-        if ($errors) {
-            return (implode("\n", $errors));
-        }
-
-        if ($this->hasNumbers($parts)) {
-            return (string) $this->calculate($parts, 'multiply');
-        }
-
-        return $numbers;
     }
 
-    private function addInternal(string $numbers): float
+    private function operationInternal(string $numbers, string $operation): float
     {
         if ($this->isEmpty($numbers)) {
             return 0;
@@ -64,7 +46,7 @@ final class StringCalculator
         }
 
         if ($this->hasNumbers($parts)) {
-            return (float) $this->calculate($parts, 'add');
+            return (float) $this->calculate($parts, $operation);
         }
 
         return (float) $numbers;
