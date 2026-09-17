@@ -22,7 +22,13 @@ final class StringCalculator
             return "0";
         }
 
-        $parts = $this->parseNumbers($numbers, "\n");
+        $separator = "\n";
+
+        if ($this->startsWithDoubleSlash($numbers)) {
+            [$separator, $numbers] = $this->parseCustomSeparator($numbers);
+        }
+
+        $parts = $this->parseNumbers($numbers, $separator);
 
         if ($this->hasNumbers($parts)) {
             return (string) $this->calculate($parts, 'multiply');
