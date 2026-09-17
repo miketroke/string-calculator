@@ -8,15 +8,34 @@ use InvalidArgumentException;
 use Exception;
 use Throwable;
 use DivisionByZeroError;
+use MRC\StringCalculator\Rules\ErrorRules\ErrorRules;
+use MRC\StringCalculator\Rules\ErrorRules\MissingNumberRule;
+use MRC\StringCalculator\Rules\ErrorRules\NegativeNumbersRule;
+use MRC\StringCalculator\Rules\OperatorRules\AddRule;
+use MRC\StringCalculator\Rules\OperatorRules\DivideRule;
+use MRC\StringCalculator\Rules\OperatorRules\MultiplyRule;
+use MRC\StringCalculator\Rules\OperatorRules\OperatorRules;
+use MRC\StringCalculator\Rules\OperatorRules\SubtractRule;
 
 final class StringCalculator
 {
+    private array $errorRules;
+    private array $operatorRules;
+
     private const OPERATORS = [
         '+' => 'add',
         '-' => 'subtract',
         '*' => 'multiply',
         '/' => 'divide',
     ];
+
+    public function __construct()
+    {
+        $this->errorRules = [
+            new NegativeNumbersRule(),
+            new MissingNumberRule(),
+        ];
+    }
 
     public function calculate(string $numbers, string $operation): string
     {
@@ -179,16 +198,14 @@ final class StringCalculator
     {
         $errors = [];
         $position = 0;
-        $lastIndex = count($parts) - 1;
 
         foreach ($parts as $index => $part) {
+            foreach ($this->errorRules as $rule) {
+                $error = $rule->validate($part, $index, $parts, $position);
 
-            if ((float) $part < 0) {
-                $errors[] = "Negative not allowed : $part";
-            }
-
-            if ($part === '' && $index > 0 && $index < $lastIndex) {
-                $errors[] = "Number expected but ',' found at position $position.";
+                if ($error !== null) {
+                    $errors[] = $error;
+                }
             }
 
             $position += strlen($part) + 1;
