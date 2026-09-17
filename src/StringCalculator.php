@@ -7,7 +7,7 @@ namespace MRC\StringCalculator;
 
 final class StringCalculator
 {
-    public function execute(string $numbers, string $operation): string
+    public function calculate(string $numbers, string $operation): string
     {
         try {
             return (string) $this->operationInternal($numbers, $operation);
@@ -37,7 +37,7 @@ final class StringCalculator
         }
 
         if ($this->hasNumbers($parts)) {
-            return (float) $this->calculate($parts, $operation);
+            return (float) $this->operate($parts, $operation);
         }
 
         return (float) $numbers;
@@ -110,7 +110,7 @@ final class StringCalculator
     {
         return count($parts) > 1;
     }
-    private function calculate(array $parts, string $operation): float
+    private function operate(array $parts, string $operation): float
     {
         switch ($operation) {
             case 'add':
