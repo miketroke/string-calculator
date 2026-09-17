@@ -9,8 +9,17 @@ final class StringCalculator
 {
     public function add(string $numbers): string
     {
+        try {
+            return (string) $this->addInternal($numbers);
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
+    }
+
+    private function addInternal(string $numbers): float
+    {
         if ($this->isEmpty($numbers)) {
-            return '0';
+            return 0;
         }
 
         $separator = "\n";
@@ -24,14 +33,14 @@ final class StringCalculator
         $errors = $this->getErrors($parts);
 
         if ($errors) {
-            return implode("\n", $errors);
+            throw new \Exception(implode("\n", $errors));
         }
 
         if ($this->hasNumbers($parts)) {
-            return $this->sum($parts);
+            return (float) $this->sum($parts);
         }
 
-        return $numbers;
+        return (float) $numbers;
     }
 
     private function isEmpty(string $numbers): bool
@@ -96,13 +105,13 @@ final class StringCalculator
     {
         return count($parts) > 1;
     }
-    private function sum(array $parts): string
+    private function sum(array $parts): float
     {
         $sum = 0;
 
         foreach ($parts as $part) {
             $sum += (float) $part;
         }
-        return (string) $sum;
+        return $sum;
     }
 }
