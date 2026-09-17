@@ -25,11 +25,20 @@ final class StringCalculator
             return '0';
         }
 
-        $result = $this->parseNumbers($expression, "+");
+        $operators = [
+            '+' => 'add',
+            '-' => 'subtract'
+        ];
 
-        $result = $this->add($result);
+        foreach ($operators as $separator => $operation) {
+            if (str_contains($expression, $separator)) {
+                $parts = $this->parseNumbers($expression, $separator);
 
-        return (string) $result;
+                return (string) $this->operate($parts, $operation);
+            }
+        }
+
+        return $expression;
     }
 
     private function operationInternal(string $numbers, string $operation): float
