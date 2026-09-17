@@ -32,11 +32,20 @@ final class StringCalculator
             '/' => 'divide',
         ];
 
-        foreach ($operators as $separator => $operation) {
-            if (str_contains($expression, $separator)) {
-                $parts = $this->parseNumbers($expression, $separator);
+        foreach ($operators as $operator => $operation) {
+            $position = strrpos($expression, $operator);
 
-                return (string) $this->operate($parts, $operation);
+            if ($position !== false) {
+                $left = substr($expression, 0, $position);
+                $right = substr($expression, $position + 1);
+
+                $leftResult = $this->evaluate($left);
+                $rightResult = $this->evaluate($right);
+
+                return (string) $this->operate(
+                    [$leftResult, $rightResult],
+                    $operation
+                );
             }
         }
 
