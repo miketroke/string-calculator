@@ -30,6 +30,12 @@ final class StringCalculator
 
         $parts = $this->parseNumbers($numbers, $separator);
 
+        $errors = $this->getErrors($parts);
+
+        if ($errors) {
+            return (implode("\n", $errors));
+        }
+
         if ($this->hasNumbers($parts)) {
             return (string) $this->calculate($parts, 'multiply');
         }
