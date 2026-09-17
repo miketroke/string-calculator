@@ -91,4 +91,10 @@ final class StringCalculatorTest extends TestCase
     {
         $this->assertSame('0', $this->calculator->multiply(''));
     }
+
+    #[Test]
+    public function multiplyReturnsSameNumberForSingleNumber(): void
+    {
+        $this->assertSame("1", $this->calculator->multiply("1"));
+    }
 }
