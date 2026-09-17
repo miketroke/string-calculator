@@ -24,6 +24,8 @@ final class StringCalculator
         if ($this->isEmpty($expression)) {
             return '0';
         }
+
+        return $expression;
     }
 
     private function operationInternal(string $numbers, string $operation): float
