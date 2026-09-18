@@ -21,7 +21,7 @@ final class StringCalculator
 {
     private array $errorRules;
     private array $operatorRules;
-
+    private array $extractExpressionRules;
     private const OPERATORS = [
         '+' => 'add',
         '-' => 'subtract',
@@ -55,81 +55,18 @@ final class StringCalculator
 
     public function evaluate(string $expression): string
     {
-        if ($this->isEmpty($expression)) {
-            return '0';
-        }
+        $position = strpos($expression, '+');
 
-        $expression = $this->resolveParentheses($expression);
+        if ($position !== false) {
+            $left = substr($expression, 0, $position);
+            $right = substr($expression, $position + 1);
 
-        foreach (self::OPERATORS as $operator => $operation) {
-            $position = strrpos($expression, $operator);
-
-            if ($position !== false) {
-                return $this->evaluateInternal(
-                    $expression,
-                    $position,
-                    $operation
-                );
-            }
+            return (string) (
+                (int) $left + (int) $right
+            );
         }
 
         return $expression;
-    }
-
-    private function resolveParentheses(string $expression): string
-    {
-        [$openPosition, $closePosition] = $this->findInnermostParentheses($expression);
-
-        if ($openPosition === null || $closePosition === null) {
-            return $expression;
-        }
-
-        $inside = substr(
-            $expression,
-            $openPosition + 1,
-            $closePosition - $openPosition - 1
-        );
-
-        $result = $this->evaluate($inside);
-
-        $expression =
-            substr($expression, 0, $openPosition)
-            . $result
-            . substr($expression, $closePosition + 1);
-
-        return $this->resolveParentheses($expression);
-    }
-
-    private function findInnermostParentheses(string $expression): array
-    {
-        $closePosition = strpos($expression, ')');
-
-        if ($closePosition === false) {
-            return [null, null];
-        }
-
-        $beforeClose = substr($expression, 0, $closePosition);
-        $openPosition = strrpos($beforeClose, '(');
-
-        if ($openPosition === false) {
-            return [null, null];
-        }
-
-        return [$openPosition, $closePosition];
-    }
-
-    private function evaluateInternal(string $expression, int $position, string $operation): string
-    {
-        $left = substr($expression, 0, $position);
-        $right = substr($expression, $position + 1);
-
-        $leftResult = $this->evaluate($left);
-        $rightResult = $this->evaluate($right);
-
-        return (string) $this->operate(
-            [$leftResult, $rightResult],
-            $operation
-        );
     }
 
     private function operationInternal(string $numbers, string $operation): float
@@ -229,7 +166,7 @@ final class StringCalculator
     private function operate(array $parts, string $operation): float
     {
         foreach ($this->operatorRules as $rule) {
-            if ($rule->supports($operation)) {
+            if ($rule->matches($operation)) {
                 return $rule->apply($parts);
             }
         }
