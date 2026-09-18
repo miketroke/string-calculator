@@ -16,18 +16,15 @@ use MRC\StringCalculator\Rules\OperatorRules\DivideRule;
 use MRC\StringCalculator\Rules\OperatorRules\MultiplyRule;
 use MRC\StringCalculator\Rules\OperatorRules\OperatorRules;
 use MRC\StringCalculator\Rules\OperatorRules\SubtractRule;
+use MRC\StringCalculator\Rules\ExpressionRules\AddExpressionRule;
+use MRC\StringCalculator\Rules\ExpressionRules\SubtractExpressionRule;
 
 final class StringCalculator
 {
     private array $errorRules;
     private array $operatorRules;
     private array $extractExpressionRules;
-    private const OPERATORS = [
-        '+' => 'add',
-        '-' => 'subtract',
-        '*' => 'multiply',
-        '/' => 'divide',
-    ];
+
 
     public function __construct()
     {
@@ -41,6 +38,11 @@ final class StringCalculator
             new SubtractRule(),
             new MultiplyRule(),
             new DivideRule(),
+        ];
+
+        $this->extractExpressionRules = [
+            new AddExpressionRule(),
+            new SubtractExpressionRule(),
         ];
     }
 
@@ -59,15 +61,10 @@ final class StringCalculator
             return "0";
         }
 
-        $position = strpos($expression, '+');
-
-        if ($position !== false) {
-            $left = substr($expression, 0, $position);
-            $right = substr($expression, $position + 1);
-
-            return (string) (
-                (int) $left + (int) $right
-            );
+        foreach ($this->extractExpressionRules as $rule) {
+            if ($rule->matches($expression)) {
+                return (string) $rule->apply($expression);
+            }
         }
 
         return $expression;
