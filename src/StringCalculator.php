@@ -7,27 +7,24 @@ namespace MRC\StringCalculator;
 use InvalidArgumentException;
 use Exception;
 use Throwable;
-use DivisionByZeroError;
-use MRC\StringCalculator\Rules\ErrorRules\ErrorRules;
+
 use MRC\StringCalculator\Rules\ErrorRules\MissingNumberRule;
 use MRC\StringCalculator\Rules\ErrorRules\NegativeNumbersRule;
+
 use MRC\StringCalculator\Rules\OperatorRules\AddRule;
 use MRC\StringCalculator\Rules\OperatorRules\DivideRule;
 use MRC\StringCalculator\Rules\OperatorRules\MultiplyRule;
-use MRC\StringCalculator\Rules\OperatorRules\OperatorRules;
 use MRC\StringCalculator\Rules\OperatorRules\SubtractRule;
+
+use MRC\StringCalculator\Rules\EvaluateRule\OperatorEvaluateRule;
+use MRC\StringCalculator\Rules\EvaluateRule\ParenthesesRule;
 
 final class StringCalculator
 {
     private array $errorRules;
     private array $operatorRules;
 
-    private const OPERATORS = [
-        '+' => 'add',
-        '-' => 'subtract',
-        '*' => 'multiply',
-        '/' => 'divide',
-    ];
+    private array $evaluateRule;
 
     public function __construct()
     {
@@ -41,6 +38,11 @@ final class StringCalculator
             new SubtractRule(),
             new MultiplyRule(),
             new DivideRule(),
+        ];
+
+        $this->evaluateRule = [
+            new ParenthesesRule(),
+            new OperatorEvaluateRule($this->operatorRules),
         ];
     }
 
@@ -59,77 +61,18 @@ final class StringCalculator
             return '0';
         }
 
-        $expression = $this->resolveParentheses($expression);
+        foreach ($this->evaluateRule as $rule) {
 
-        foreach (self::OPERATORS as $operator => $operation) {
-            $position = strrpos($expression, $operator);
-
-            if ($position !== false) {
-                return $this->evaluateInternal(
+            if ($rule->supports($expression)) {
+                return $rule->apply(
                     $expression,
-                    $position,
-                    $operation
+                    fn(string $value) => $this->evaluate($value)
                 );
             }
+
         }
 
         return $expression;
-    }
-
-    private function resolveParentheses(string $expression): string
-    {
-        [$openPosition, $closePosition] = $this->findInnermostParentheses($expression);
-
-        if ($openPosition === null || $closePosition === null) {
-            return $expression;
-        }
-
-        $inside = substr(
-            $expression,
-            $openPosition + 1,
-            $closePosition - $openPosition - 1
-        );
-
-        $result = $this->evaluate($inside);
-
-        $expression =
-            substr($expression, 0, $openPosition)
-            . $result
-            . substr($expression, $closePosition + 1);
-
-        return $this->resolveParentheses($expression);
-    }
-
-    private function findInnermostParentheses(string $expression): array
-    {
-        $closePosition = strpos($expression, ')');
-
-        if ($closePosition === false) {
-            return [null, null];
-        }
-
-        $beforeClose = substr($expression, 0, $closePosition);
-        $openPosition = strrpos($beforeClose, '(');
-
-        if ($openPosition === false) {
-            return [null, null];
-        }
-
-        return [$openPosition, $closePosition];
-    }
-
-    private function evaluateInternal(string $expression, int $position, string $operation): string
-    {
-        $left = substr($expression, 0, $position);
-        $right = substr($expression, $position + 1);
-
-        $leftResult = $this->evaluate($left);
-        $rightResult = $this->evaluate($right);
-
-        return (string) $this->operate(
-            [$leftResult, $rightResult],
-            $operation
-        );
     }
 
     private function operationInternal(string $numbers, string $operation): float
