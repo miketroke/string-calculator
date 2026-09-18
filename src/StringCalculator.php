@@ -63,7 +63,7 @@ final class StringCalculator
 
         foreach ($this->extractExpressionRules as $rule) {
             if ($rule->matches($expression)) {
-                return (string) $rule->apply($expression);
+                return $this->evaluate($rule->apply($expression));
             }
         }
 

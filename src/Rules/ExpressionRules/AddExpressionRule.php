@@ -14,13 +14,19 @@ final class AddExpressionRule implements ExpressionRule
     {
         $position = strpos($expression, '+');
 
-        if ($position !== false) {
-            [$left, $right] = explode('+', $expression);
+        $left = substr($expression, 0, $position);
+        $right = substr($expression, $position + 1);
 
-            return (string) (
-                (int) $left + (int) $right
-            );
+        $rightParts = explode('+', $right, 2);
+
+        if (count($rightParts) === 2) {
+            $rightResult = (int) $rightParts[0] + (int) $rightParts[1];
+
+            return $left . '+' . $rightResult;
         }
-        return $expression;
+
+        return (string) (
+            (int) $left + (int) $right
+        );
     }
 }
