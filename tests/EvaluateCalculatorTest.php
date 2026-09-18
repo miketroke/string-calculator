@@ -119,5 +119,34 @@ final class EvaluateCalculatorTest extends TestCase
         $this->assertSame("8", $this->calculator->evaluate("1+(2*3)+(4-2)/2"));
     }
 
+    #[Test]
+    public function evaluateReturnsResultOnPower(): void
+    {
+        $this->assertSame("8", $this->calculator->evaluate("2^3"));
+    }
+
+    #[Test]
+    public function evaluateReturnsResultOnPowerWithMultipleNumbers(): void
+    {
+        $this->assertSame("64", $this->calculator->evaluate("2^3^2"));
+    }
+
+    #[Test]
+    public function evaluateReturnsResultOnMixedOperationsWithPower(): void
+    {
+        $this->assertSame("10", $this->calculator->evaluate("2+2^3"));
+    }
+
+    #[Test]
+    public function evaluateReturnsResultOnPowerWithParentheses(): void
+    {
+        $this->assertSame("64", $this->calculator->evaluate("(2^3)^2"));
+    }
+
+    #[Test]
+    public function evaluateReturnsResultOnPowerWithMultipleNumbersComplexAndParentheses(): void
+    {
+        $this->assertSame("32", $this->calculator->evaluate("2^(3+3)/2"));
+    }
 }
 
