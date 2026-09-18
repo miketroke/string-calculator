@@ -4,27 +4,28 @@ declare(strict_types=1);
 
 namespace MRC\StringCalculator;
 
-use InvalidArgumentException;
 use Exception;
+use InvalidArgumentException;
 use Throwable;
-use DivisionByZeroError;
-use MRC\StringCalculator\Rules\ErrorRules\ErrorRules;
 use MRC\StringCalculator\Rules\ErrorRules\MissingNumberRule;
 use MRC\StringCalculator\Rules\ErrorRules\NegativeNumbersRule;
 use MRC\StringCalculator\Rules\OperatorRules\AddRule;
 use MRC\StringCalculator\Rules\OperatorRules\DivideRule;
 use MRC\StringCalculator\Rules\OperatorRules\MultiplyRule;
-use MRC\StringCalculator\Rules\OperatorRules\OperatorRules;
 use MRC\StringCalculator\Rules\OperatorRules\SubtractRule;
-use MRC\StringCalculator\Rules\ExpressionRules\AddExpressionRule;
-use MRC\StringCalculator\Rules\ExpressionRules\SubtractExpressionRule;
+use MRC\StringCalculator\Rules\EvaluateRules\EvaluateRule;
+use MRC\StringCalculator\Rules\EvaluateRules\ParenthesesRule;
+use MRC\StringCalculator\Rules\EvaluateRules\MultiplyRule as EvaluateMultiplyRule;
+use MRC\StringCalculator\Rules\EvaluateRules\DivideRule as EvaluateDivideRule;
+use MRC\StringCalculator\Rules\EvaluateRules\AddRule as EvaluateAddRule;
+use MRC\StringCalculator\Rules\EvaluateRules\SubtractRule as EvaluateSubtractRule;
 
 final class StringCalculator
 {
     private array $errorRules;
     private array $operatorRules;
-    private array $extractExpressionRules;
-
+    /** @var EvaluateRule[] */
+    private array $evaluateRules;
 
     public function __construct()
     {
@@ -40,9 +41,12 @@ final class StringCalculator
             new DivideRule(),
         ];
 
-        $this->extractExpressionRules = [
-            new AddExpressionRule(),
-            new SubtractExpressionRule(),
+        $this->evaluateRules = [
+            new ParenthesesRule(),
+            new EvaluateMultiplyRule(),
+            new EvaluateDivideRule(),
+            new EvaluateAddRule(),
+            new EvaluateSubtractRule(),
         ];
     }
 
@@ -58,12 +62,14 @@ final class StringCalculator
     public function evaluate(string $expression): string
     {
         if ($this->isEmpty($expression)) {
-            return "0";
+            return '0';
         }
 
-        foreach ($this->extractExpressionRules as $rule) {
-            if ($rule->matches($expression)) {
-                return $this->evaluate($rule->apply($expression));
+        foreach ($this->evaluateRules as $rule) {
+            if ($rule->supports($expression)) {
+                return $this->evaluate(
+                    $rule->apply($expression, fn(string $value): string => $this->evaluate($value))
+                );
             }
         }
 
