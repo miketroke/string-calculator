@@ -55,6 +55,10 @@ final class StringCalculator
 
     public function evaluate(string $expression): string
     {
+        if ($this->isEmpty($expression)) {
+            return "0";
+        }
+
         $position = strpos($expression, '+');
 
         if ($position !== false) {
