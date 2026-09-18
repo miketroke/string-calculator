@@ -15,6 +15,7 @@ use MRC\StringCalculator\Rules\OperatorRules\AddRule;
 use MRC\StringCalculator\Rules\OperatorRules\DivideRule;
 use MRC\StringCalculator\Rules\OperatorRules\MultiplyRule;
 use MRC\StringCalculator\Rules\OperatorRules\SubtractRule;
+use MRC\StringCalculator\Rules\OperatorRules\PowerRule;
 
 use MRC\StringCalculator\Rules\EvaluateRule\OperatorEvaluateRule;
 use MRC\StringCalculator\Rules\EvaluateRule\ParenthesesRule;
@@ -38,6 +39,7 @@ final class StringCalculator
             new SubtractRule(),
             new MultiplyRule(),
             new DivideRule(),
+            new PowerRule(),
         ];
 
         $this->evaluateRule = [

@@ -11,6 +11,7 @@ class OperatorEvaluateRule implements EvaluateRule
         '-' => 'subtract',
         '*' => 'multiply',
         '/' => 'divide',
+        '^' => 'power',
     ];
 
     private array $operatorRules;
