@@ -4,7 +4,7 @@ namespace MRC\StringCalculator\Rules\OperatorRules;
 
 final class SubtractRule implements OperatorRules
 {
-    public function supports(string $operation): bool
+    public function matches(string $operation): bool
     {
         return $operation === 'subtract';
     }

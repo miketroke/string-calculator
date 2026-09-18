@@ -6,7 +6,7 @@ use DivisionByZeroError;
 
 final class DivideRule implements OperatorRules
 {
-    public function supports(string $operation): bool
+    public function matches(string $operation): bool
     {
         return $operation === 'divide';
     }
